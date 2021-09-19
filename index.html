@@ -70,8 +70,17 @@
       </section>
     </main>
     <footer class="footer">
-      <p class="footer__copyright">&copy; 2021 Mesto Russia</p>  
+      <p class="footer__copyright">&copy; 2021 Mesto Russia</p>
     </footer>
   </div>
+  <section class="popup popup_active">
+    <form name="profile-edit" class="popup__container">
+      <button type="button" class="popup__close-button"></button>
+      <h2 class="popup__title">Редактировать профиль</h2>
+      <input type="text" name="profile-input-name" class="popup__input">
+      <input type="text" name="profile-input-description" class="popup__input">
+      <button type="submit" class="popup__save-button">Сохранить</button>
+    </form>
+  </section>
 </body>
 </html>
