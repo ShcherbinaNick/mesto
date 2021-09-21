@@ -4,4 +4,10 @@
   background: url(../../../images/Add\ Button.svg) no-repeat center center;
   border: none;
   padding: 0;
+  cursor: pointer;
+}
+
+.profile__add-button:hover {
+  opacity: .8;
+  transition: .4s all ease;
 }

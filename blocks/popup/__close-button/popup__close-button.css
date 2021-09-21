@@ -7,4 +7,10 @@
   background: url(../../../images/Close\ Icon.svg) no-repeat center center;
   border: none;
   padding: 0;
+  cursor: pointer;
+}
+
+.popup__close-button:hover {
+  opacity: .8;
+  transition: .4s all ease;
 }
