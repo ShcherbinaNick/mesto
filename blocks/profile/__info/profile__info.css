@@ -1,6 +1,5 @@
 .profile__info {
-  width: 336px;
   margin-right: auto;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
 }
