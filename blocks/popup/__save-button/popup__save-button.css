@@ -4,6 +4,7 @@
   padding: 14px 0 18px;
   color: #ffffff;
   background-color: #000000;
+  border-radius: 2px;
   font-size: 18px;
   line-height: 22px;
   text-align: center;
@@ -11,7 +12,14 @@
 }
 
 .popup__save-button:hover {
-  border-radius: 2px;
   opacity: .8;
   transition: .4s all ease;
+}
+
+@media screen and (max-width: 768px) {
+  .popup__save-button {
+    padding: 14px 0;
+    font-size: 14px;
+    line-height: 17px;
+  }  
 }

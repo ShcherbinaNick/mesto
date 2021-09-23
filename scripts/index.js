@@ -28,6 +28,17 @@ function popupClose() {
 popupOpenBtn.addEventListener('click', popupOpen)
 popupCloseBtn.addEventListener('click', popupClose)
 
+// Функциональность лайков. Пока она работает на одну карточку, наверное,
+// для отображения на всех карточках нужно писать
+// массив. Вроде этого не просят делать,
+// поэтому я пока решил оставить так. Если нужно, поправлю
+function likeToggle() {
+  likeBtn.classList.toggle('cards__like-button_active')
+}
+
+// Отслеживание событий нажатия на лайк
+likeBtn.addEventListener('click', likeToggle)
+
 // Обработчик «отправки» формы, хотя пока
 // она никуда отправляться не будет
 function formSubmitHandler (evt) {

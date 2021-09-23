@@ -3,3 +3,9 @@
   align-items: baseline;
   margin-bottom: 16px;
 }
+
+@media screen and (max-width: 768px) {
+  .profile__main {
+    margin-bottom: 14px;
+  }  
+}

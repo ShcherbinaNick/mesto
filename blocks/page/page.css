@@ -3,8 +3,9 @@
   font-family: 'Inter', Arial, sans-serif;
   font-weight: 400;
   min-width: 320px;
+  margin: 0 auto;
 }
 
 * {
-  outline: 1px solid aqua;
+  outline: 1px solid azure;
 }
