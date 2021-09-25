@@ -3,7 +3,6 @@ let popup = document.querySelector('.popup')
 // Переменные кнопок
 let popupOpenBtn = document.querySelector('.profile__edit-button')
 let popupCloseBtn = popup.querySelector('.popup__close-button')
-let likeBtn = document.querySelector('.cards__like-button')
 // Переменные полей профиля
 let profileName = document.querySelector('.profile__title')
 let profileDesc = document.querySelector('.profile__subtitle')
