@@ -9,11 +9,11 @@
   border: none;
   padding: 0;
   cursor: pointer;
+  transition: .4s all ease;
 }
 
 .popup__close-button:hover {
   opacity: .6;
-  transition: .4s all ease;
 }
 
 @media screen and (max-width:768px) {
