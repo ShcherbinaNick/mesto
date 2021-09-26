@@ -7,11 +7,11 @@
   border-radius: 2px;
   padding: 0;
   cursor: pointer;
+  transition: .4s all ease;
 }
 
 .profile__add-button:hover {
   opacity: .6;
-  transition: .4s all ease;
 }
 
 @media screen and (max-width: 768px) {
