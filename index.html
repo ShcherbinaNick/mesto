@@ -10,9 +10,6 @@
 <body>
   <div class="page">
     <header class="header">
-      <!--Не пойму сейчас поведения ссылки - при добавлении создаёт область под логотипом,
-          когда я пытаюсь задать изображению "inline-block", чтобы она не растягивалась на
-          всю ширину. После сдачи буду разбираться :) -->
       <img src="./images/logo.svg" alt="место Россия" class="header__logo">
     </header>
     <main class="content">
@@ -21,56 +18,14 @@
         <div class="profile__info">
           <div class="profile__main">
             <h1 class="profile__title">Жак-Ив Кусто</h1>
-            <button type="button" aria-label="редактировать" class="profile__edit-button"></button>
+            <button type="button" aria-label="редактировать профиль" class="profile__edit-button"></button>
           </div>
           <p class="profile__subtitle">Исследователь океана</p>
         </div>
-        <button type="button" aria-label="добавить" class="profile__add-button"></button>
+        <button type="button" aria-label="добавить карточку" class="profile__add-button"></button>
       </section>
       <section class="cards">
         <ul class="cards__list">
-          <li class="card">
-            <img src="./images/kirill-pershin-1088404-unsplash.jpg" alt="Сентинский Храм" class="card__image">
-            <div class="card__text">
-              <h2 class="card__name">Карачаевск</h2>
-              <button type="button" class="card__like-button"></button>
-            </div>
-          </li>
-          <li class="card">
-            <img src="./images/anton-maksimov-juvnsky-kwFMzmkL2-Y-unsplash.jpg" alt="Кичи-Балык" class="card__image">
-            <div class="card__text">
-              <h2 class="card__name">Кичи-Балык</h2>
-              <button type="button" class="card__like-button"></button>
-            </div>
-          </li>
-          <li class="card">
-            <img src="./images/kirill-pershin-lM7d4RfO-G8-unsplash.jpg" alt="туманные горы с подмостком" class="card__image">
-            <div class="card__text">
-              <h2 class="card__name">Красная поляна</h2>
-              <button type="button" class="card__like-button"></button>
-            </div>
-          </li>
-          <li class="card">  
-            <img src="./images/aleksandr-shemetillo-EWU60lOeys-unsplash.jpg" alt="туманный лес" class="card__image">
-            <div class="card__text">
-              <h2 class="card__name">Алтай</h2>
-              <button type="button" class="card__like-button"></button>
-            </div>
-          </li>
-          <li class="card">
-            <img src="./images/alexey-derevtsov-5oMA0m0bHdM-unsplash.jpg" alt="снежные горы в закате" class="card__image">
-            <div class="card__text">
-              <h2 class="card__name">Гора Волосяная</h2>
-              <button type="button" class="card__like-button"></button>
-            </div>
-          </li>
-          <li class="card">
-            <img src="./images/alexey-derevtsov-RSDqFEAofOs-unsplash.jpg" alt="горная река" class="card__image">
-            <div class="card__text">
-              <h2 class="card__name">Полуостров Средний</h2>
-              <button type="button" class="card__like-button"></button>
-            </div>
-          </li>
         </ul>
       </section>
     </main>
@@ -78,17 +33,43 @@
       <p class="footer__copyright">&copy; 2021 Mesto Russia</p>
     </footer>
   </div>
-  <article class="popup">
-    <form name="profile-edit" class="popup__container">
+  <article class="popup popup_type_profile-edit">
+    <form name="profile_edit" class="popup__container">
       <button type="button" aria-label="закрыть" class="popup__close-button"></button>
       <h2 class="popup__title">Редактировать профиль</h2>
-      <!--Я понял, что разложил по папкам модификаторы не по БЭМ. Пока сделал их элементами,
-          в будущей работе поменяю, поскольку пока нет понимания, что туда нужно будет вкладывать-->
-      <input type="text" name="profile-input-name" class="popup__input popup__input-field-name">
-      <input type="text" name="profile-input-description" class="popup__input popup__input-field-description">
+      <input type="text" name="profile-input-name" class="popup__input popup__input-field-name" placeholder="Имя">
+      <input type="text" name="profile-input-description" class="popup__input popup__input-field-description" placeholder="Род деятельности">
       <button type="submit" class="popup__save-button">Сохранить</button>
     </form>
   </article>
+  <article class="popup popup_type_new-card">
+    <form name="card_edit" class="popup__container">
+      <button type="button" aria-label="закрыть" class="popup__close-button"></button>
+      <h2 class="popup__title">Новое место</h2>
+      <input type="text" name="card-input-name" class="popup__input popup__input-field-card" placeholder="Название">
+      <input type="text" name="card-input-link" class="popup__input popup__input-field-link" placeholder="Ссылка на картинку">
+      <button type="submit" class="popup__save-button">Создать</button>
+    </form>
+  </article>
+  <article class="popup popup_type_image">
+    <figure class="popup__figure">
+      <button type="button" aria-label="закрыть" class="popup__close-button"></button>
+      <img src="#" alt="природная достопримечательность" class="popup__figure-image">
+      <figcaption class="popup__figure-title"></figcaption>
+    </figure>
+  </article>
+  <template class="cards-template">
+    <li class="card">
+      <div class="card__image-container">
+        <img src="#" alt="фото достопримечательности" class="card__image">
+        </div>
+      <button type="button" aria-label="удалить" class="card__delete"></button>
+      <div class="card__text">
+        <h2 class="card__name"></h2>
+        <button type="button" aria-label="поставить лайк" class="card__like-button"></button>
+      </div>
+    </li>
+  </template>
   <script src="./scripts/index.js"></script>
 </body>
 </html>
