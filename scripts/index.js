@@ -1,5 +1,4 @@
 // Переменная popup
-const popup = document.querySelector('.popup'); // позиционирование и скрытие попапа
 const profilePopup = document.querySelector('.popup_type_profile-edit'); // попап профиля
 const cardItemPopup = document.querySelector('.popup_type_new-card'); // попап создания карточки
 const imagePopup = document.querySelector('.popup_type_image'); // попап отображения картинки
@@ -13,8 +12,8 @@ const profileDesc = document.querySelector('.profile__subtitle'); // род де
 // Переменные формы
 const profileFormElement = document.forms.profile_edit; // попап с редактированием информации пользователя
 const cardFormElement = document.forms.card_edit; // попап добавления новой карточки
-const nameInput = popup.querySelector('.popup__input-field-name'); // поле ввода профиля
-const jobInput = popup.querySelector('.popup__input-field-description'); // поле ввода рода деятельности
+const nameInput = profilePopup.querySelector('.popup__input-field-name'); // поле ввода профиля
+const jobInput = profilePopup.querySelector('.popup__input-field-description'); // поле ввода рода деятельности
 // Переменные полей формы создания карточки
 const cardInputText = document.querySelector('.popup__input-field-card');
 const cardInputLink = document.querySelector('.popup__input-field-link');
@@ -60,6 +59,7 @@ function createCard(card) {
   const newCardImage = newCard.querySelector('.card__image');
   const likeBtn = newCard.querySelector('.card__like-button');
   newCardName.textContent = card.name;
+  newCardImage.alt = card.name;
   newCardImage.src = card.link;
   // Лайк на каждую созданную карточку
   likeBtn.addEventListener('click', (evt) => {
@@ -141,8 +141,8 @@ function deleteCard(evt) {
 
 // Значения для попапа с увеличенным просмотром картинки
 function openImage(image, alt, figcaption) {
-imagePopupPicture.src = image;
-imagePopupPicture.alt = alt;
-imagePopupTitle.textContent = figcaption;
+  imagePopupPicture.src = image;
+  imagePopupPicture.alt = alt;
+  imagePopupTitle.textContent = figcaption;
 openPopup(imagePopup);
 }
