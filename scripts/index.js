@@ -12,11 +12,11 @@ const profileDesc = document.querySelector('.profile__subtitle'); // род де
 // Переменные формы
 const profileFormElement = document.forms.profile_edit; // попап с редактированием информации пользователя
 const cardFormElement = document.forms.card_edit; // попап добавления новой карточки
-const nameInput = profilePopup.querySelector('.popup__input-field-name'); // поле ввода профиля
-const jobInput = profilePopup.querySelector('.popup__input-field-description'); // поле ввода рода деятельности
+const nameInput = profilePopup.querySelector('.popup__input_field_name'); // поле ввода профиля
+const jobInput = profilePopup.querySelector('.popup__input_field_description'); // поле ввода рода деятельности
 // Переменные полей формы создания карточки
-const cardInputText = document.querySelector('.popup__input-field-card');
-const cardInputLink = document.querySelector('.popup__input-field-link');
+const cardInputText = document.querySelector('.popup__input_field_card');
+const cardInputLink = document.querySelector('.popup__input_field_link');
 // Переменные для попаса с увеличенным изображением картинки
 const imagePopupPicture = imagePopup.querySelector('.popup__figure-image');
 const imagePopupTitle = imagePopup.querySelector('.popup__figure-title');
@@ -87,6 +87,7 @@ initialCards.map(renderCards);
 // Открытие popup
 function openPopup(item) {
   item.classList.add('popup_active');
+  setEscape();
 };
 
 popupOpenBtn.addEventListener('click', () => {
@@ -98,6 +99,7 @@ popupOpenBtn.addEventListener('click', () => {
 // Закрытие попапов
 function closePopup(item) {
   item.classList.remove('popup_active');
+  removeEscape();
 };
 
 popupCloseBtns.forEach((item) => {
@@ -146,3 +148,29 @@ function openImage(image, alt, figcaption) {
   imagePopupTitle.textContent = figcaption;
 openPopup(imagePopup);
 }
+
+//Закрытие попапа по нажатию на оверлей
+const popups = document.querySelectorAll('.popup');
+popups.forEach((element) => {
+  element.addEventListener('click', (event) => {
+    if (event.target === event.currentTarget) {
+      closePopup(event.target);
+    };
+  });
+});
+
+//Закрытие попапа по нажатию на esc
+function closeEsc(event) {
+  const currentPopup = document.querySelector('.popup_active');
+  if (event.key === 'Escape') {
+    closePopup(currentPopup);
+  };
+}
+
+function setEscape() {
+  document.addEventListener('keydown', closeEsc);
+};
+
+function removeEscape() {
+  document.removeEventListener('keydown', closeEsc);
+};
