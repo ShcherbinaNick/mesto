@@ -1,7 +1,9 @@
+import { Card } from './Card.js'
+import { config, FormValidator } from './FormValidator.js'
+
 // Переменная popup
 const profilePopup = document.querySelector('.popup_type_profile-edit'); // попап профиля
 const cardItemPopup = document.querySelector('.popup_type_new-card'); // попап создания карточки
-const imagePopup = document.querySelector('.popup_type_image'); // попап отображения картинки
 // Переменные кнопок
 const popupOpenBtn = document.querySelector('.profile__edit-button'); // редактирование профиля
 const popupCloseBtns = document.querySelectorAll('.popup__close-button'); // закрыть
@@ -17,9 +19,12 @@ const jobInput = profilePopup.querySelector('.popup__input_field_description'); 
 // Переменные полей формы создания карточки
 const cardInputText = document.querySelector('.popup__input_field_card');
 const cardInputLink = document.querySelector('.popup__input_field_link');
-// Переменные для попаса с увеличенным изображением картинки
-const imagePopupPicture = imagePopup.querySelector('.popup__figure-image');
-const imagePopupTitle = imagePopup.querySelector('.popup__figure-title');
+// Список карточек в разметке
+const cardsList = document.querySelector('.cards__list');
+// Попапы
+const popups = document.querySelectorAll('.popup');
+// Список карточек
+const cardsTemplate = '.cards-template';
 // Массив из задания
 const initialCards = [
   {
@@ -47,41 +52,12 @@ const initialCards = [
     link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
   }
 ];
-
-// Список карточек в разметке
-const cardsList = document.querySelector('.cards__list');
-
-// Преобразование элементов массива
-function createCard(card) {
-  const cardsTemplate = document.querySelector('.cards-template');
-  const newCard = cardsTemplate.content.cloneNode(true);
-  const newCardName = newCard.querySelector('.card__name');
-  const newCardImage = newCard.querySelector('.card__image');
-  const likeBtn = newCard.querySelector('.card__like-button');
-  newCardName.textContent = card.name;
-  newCardImage.alt = card.name;
-  newCardImage.src = card.link;
-  // Лайк на каждую созданную карточку
-  likeBtn.addEventListener('click', (evt) => {
-    evt.target.classList.toggle('card__like-button_active');
-  });
-  // Удаление карточки
-  const deleteCardBtn = newCard.querySelector('.card__delete');
-  deleteCardBtn.addEventListener('click', deleteCard);
-  // Открытие картинки
-  const fullImage = newCard.querySelector('.card__image');
-  fullImage.addEventListener('click', () => {
-    openImage(newCardImage.src, newCardImage.alt, newCardName.textContent);
-  });
-
-  return newCard;
+// Добавление карточек
+const renderCards = (item) => {
+  const newCard = new Card(item, cardsTemplate);
+  const newCardElement = newCard.generateCard();
+  cardsList.prepend(newCardElement);
 }
-// Добавление карточки на страницу
-function renderCards(item) {
-  const newCard = createCard(item);
-  cardsList.prepend(newCard);
-}
-
 initialCards.map(renderCards);
 
 // Открытие popup
@@ -145,21 +121,7 @@ function submitFormHandler (evt) {
 }
 profileFormElement.addEventListener('submit', submitFormHandler);
 
-// Удаление карточки
-function deleteCard(evt) {
-  evt.currentTarget.closest('.card').remove();
-};
-
-// Значения для попапа с увеличенным просмотром картинки
-function openImage(image, alt, figcaption) {
-  imagePopupPicture.src = image;
-  imagePopupPicture.alt = alt;
-  imagePopupTitle.textContent = figcaption;
-openPopup(imagePopup);
-};
-
 //Закрытие попапа по нажатию на оверлей
-const popups = document.querySelectorAll('.popup');
 popups.forEach((element) => {
   element.addEventListener('click', (event) => {
     if (event.target === event.currentTarget) {
@@ -183,3 +145,16 @@ function setEscape() {
 function removeEscape() {
   document.removeEventListener('keydown', closeEsc);
 };
+
+// Включение валидации
+const enableValidate = (config) => {
+  const formList = Array.from(document.querySelectorAll(config.formSelector))
+  formList.forEach((formElement) => {
+    const validateForm = new FormValidator(formElement, config)
+    validateForm.enableValidate();
+  });
+};
+
+enableValidate(config);
+
+export { openPopup }
