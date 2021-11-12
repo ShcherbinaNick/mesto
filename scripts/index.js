@@ -74,9 +74,9 @@ function openPopup(item) {
 };
 
 popupOpenBtn.addEventListener('click', () => {
+  formValidators[ 'profile_edit' ].resetValidation();
   nameInput.value = profileName.textContent;
   jobInput.value = profileDesc.textContent;
-  formValidators[ 'profile_edit' ].resetValidation();
   openPopup(profilePopup);
 });
 
