@@ -1,14 +1,21 @@
 import { openPopup } from './index.js'
 
+const imagePopup = document.querySelector('.popup_type_image');
+const imagePopupPicture = imagePopup.querySelector('.popup__figure-image');
+const imagePopupTitle = imagePopup.querySelector('.popup__figure-title');
+
 class Card {
   constructor(data, cardSelector) {
     this._name = data.name;
     this._image = data.link;
     this._alt = data.name;
     this._cardSelector = cardSelector;
+    this._card = this._getTemplate(); // Записываем разметку в приватное поле, чтобы элементы получили доступ
     this._figcaption = data.name;
+    this._cardName = this._card.querySelector('.card__name');
+    this._cardImage = this._card.querySelector('.card__image');
+    this._likeBtn = this._card.querySelector('.card__like-button');
   }
-  
   // Получаем шаблон разметки и возвращаем DOM-элемент
   _getTemplate() {
     const cardElement = document
@@ -20,24 +27,20 @@ class Card {
   }
   // Наполняем карточку данными, единственный публичный метод
   generateCard() {
-    this._card = this._getTemplate(); // Записываем разметку в приватное поле, чтобы элементы получили доступ
+    this._cardName.textContent = this._name;
+    this._cardImage.src = this._image;
+    this._cardImage.alt = this._name;
     this._setEventListeners();
-    this._card.querySelector('.card__name').textContent = this._name;
-    this._card.querySelector('.card__image').src = this._image;
-    this._card.querySelector('.card__image').alt = this._name;
     return this._card
   }
   // Приватные методы
   _like() {
-    this._card.querySelector('.card__like-button').classList.toggle('card__like-button_active');
+    this._likeBtn.classList.toggle('card__like-button_active');
   }
   _deleteCard() {
-    document.querySelector('.card').remove();
+    this._card.remove();
   }
   _openImage() {
-    const imagePopup = document.querySelector('.popup_type_image');
-    const imagePopupPicture = imagePopup.querySelector('.popup__figure-image');
-    const imagePopupTitle = imagePopup.querySelector('.popup__figure-title');
     imagePopupPicture.src = this._image;
     imagePopupPicture.alt = this._alt;
     imagePopupTitle.textContent = this._figcaption;

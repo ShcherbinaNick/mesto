@@ -6,7 +6,6 @@ const profilePopup = document.querySelector('.popup_type_profile-edit'); // по
 const cardItemPopup = document.querySelector('.popup_type_new-card'); // попап создания карточки
 // Переменные кнопок
 const popupOpenBtn = document.querySelector('.profile__edit-button'); // редактирование профиля
-const popupCloseBtns = document.querySelectorAll('.popup__close-button'); // закрыть
 const addCard = document.querySelector('.profile__add-button'); // добавить карточку
 // Переменные полей профиля
 const profileName = document.querySelector('.profile__title'); // название профиля
@@ -25,6 +24,8 @@ const cardsList = document.querySelector('.cards__list');
 const popups = document.querySelectorAll('.popup');
 // Список карточек
 const cardsTemplate = '.cards-template';
+// Объект для форм
+const formValidators = {}
 // Массив из задания
 const initialCards = [
   {
@@ -52,10 +53,16 @@ const initialCards = [
     link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
   }
 ];
+
+// Создание карточек
+const createCard = (item) => {
+  const newCard = new Card(item, cardsTemplate);
+  return newCard.generateCard();
+}
+
 // Добавление карточек
 const renderCards = (item) => {
-  const newCard = new Card(item, cardsTemplate);
-  const newCardElement = newCard.generateCard();
+  const newCardElement = createCard(item);
   cardsList.prepend(newCardElement);
 }
 initialCards.map(renderCards);
@@ -69,6 +76,7 @@ function openPopup(item) {
 popupOpenBtn.addEventListener('click', () => {
   nameInput.value = profileName.textContent;
   jobInput.value = profileDesc.textContent;
+  formValidators[ 'profile_edit' ].resetValidation();
   openPopup(profilePopup);
 });
 
@@ -78,23 +86,21 @@ function closePopup(item) {
   removeEscape();
 };
 
-popupCloseBtns.forEach((item) => {
-  item.addEventListener('click', () => {
-    closePopup(item.closest('.popup'));
+//Закрытие попапа по нажатию на оверлей
+popups.forEach((element) => {
+  element.addEventListener('click', (evt) => {
+    if (evt.target.classList.contains('popup') || evt.target.classList.contains('popup__close-button')) {
+      closePopup(element);
+    }
   });
 });
 
 // Отвечает за открытие попапа с добавлением карточки
 addCard.addEventListener('click', () => {
+  formValidators[ 'card_edit'].resetValidation();
   openPopup(cardItemPopup);
 });
 
-// Функция, делающая кнопку неактивной после создания карточки
-function disableBtn(formElement) {
-  const btn = formElement.querySelector('.popup__save-button');
-  btn.classList.add('popup__save-button_disabled');
-  btn.disabled = true;
-}
 
 // Добавление карточки при нажатии на кнопку
 function addNewCard(evt) {
@@ -107,7 +113,6 @@ function addNewCard(evt) {
   closePopup(cardItemPopup);
   cardInputText.value = ''; // Очистка полей при закрытии
   cardInputLink.value = ''; // Очистка полей при закрытии
-  disableBtn(cardItemPopup);
 };
 cardFormElement.addEventListener('submit', addNewCard);
 
@@ -117,23 +122,13 @@ function submitFormHandler (evt) {
   profileName.textContent = nameInput.value;
   profileDesc.textContent = jobInput.value;
   closePopup(profilePopup);
-  disableBtn(profilePopup);
 }
 profileFormElement.addEventListener('submit', submitFormHandler);
 
-//Закрытие попапа по нажатию на оверлей
-popups.forEach((element) => {
-  element.addEventListener('click', (event) => {
-    if (event.target === event.currentTarget) {
-      closePopup(event.target);
-    };
-  });
-});
-
 //Закрытие попапа по нажатию на esc
 function closeEsc(event) {
-  const currentPopup = document.querySelector('.popup_active');
   if (event.key === 'Escape') {
+    const currentPopup = document.querySelector('.popup_active');
     closePopup(currentPopup);
   };
 };
@@ -151,6 +146,7 @@ const enableValidate = (config) => {
   const formList = Array.from(document.querySelectorAll(config.formSelector))
   formList.forEach((formElement) => {
     const validateForm = new FormValidator(formElement, config)
+    formValidators[ formElement.name ] = validateForm;
     validateForm.enableValidate();
   });
 };

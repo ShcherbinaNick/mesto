@@ -6,7 +6,7 @@ const config = {
   popupCloseBtn: '.popup__close-button',
   inactiveButtonClass: 'popup__save-button_disabled',
   inputErrorClass: 'popup__error',
-  errorClass: 'popup__input-error',
+  errorClass: 'popup__input-error'
 }
 
 class FormValidator {
@@ -14,7 +14,6 @@ class FormValidator {
     this._formElement = form;
     this._inputList = Array.from(form.querySelectorAll(config.inputSelector));
     this._buttonElement = this._formElement.querySelector(config.submitButtonSelector);
-    this._closeButton = this._formElement.querySelector(config.popupCloseBtn);
   }
   // Прячет ошибку валидации
   _hideInputError(inputElement) {
@@ -28,6 +27,16 @@ class FormValidator {
     inputElement.classList.add(config.inputErrorClass);
     inputError.textContent = errorElement;
   }
+  // Функция, делающая кнопку неактивной после создания карточки
+  _disableBtn() {
+    this._buttonElement.classList.add(config.inactiveButtonClass);
+    this._buttonElement.disabled = true;
+  }
+  // Функция, делающая кнопку активной
+  _enableBtn() {
+    this._buttonElement.classList.remove(config.inactiveButtonClass);
+    this._buttonElement.disabled = false;
+  }
   // Возвращает, есть ли в форме невалидные поля
   _hasInvalidInput() {
     return this._inputList.some((inputElement) => {
@@ -37,11 +46,9 @@ class FormValidator {
   // Переключение кнопки
   _toggleButtonState() {
     if (this._hasInvalidInput()) {
-      this._buttonElement.classList.add(config.inactiveButtonClass);
-      this._buttonElement.disabled = true;
+      this._disableBtn();
     } else {
-      this._buttonElement.classList.remove(config.inactiveButtonClass);
-      this._buttonElement.disabled = false;
+      this._enableBtn();
     }
   }
   // Проверка на валидность
@@ -52,6 +59,13 @@ class FormValidator {
       this._hideInputError(inputElement);
     }
   }
+  // Очистка ошибок
+  resetValidation() {
+    this._inputList.forEach((inputElement) => {
+      this._hideInputError(inputElement);
+    });
+    this._formElement.reset();
+  }
   // Установка листнеров на инпуты
   _setEventListeners() {
     this._inputList.forEach((inputElement) => {
@@ -60,19 +74,15 @@ class FormValidator {
         this._toggleButtonState();
       });
     });
-    this._closeButton.addEventListener('click', () => {
-      this._inputList.forEach((inputElement) => {
-        this._hideInputError(inputElement);
-      });
-      this._formElement.reset();
-    });
-  }
+    }
   // Включает валидацию
   enableValidate() {
     this._formElement.addEventListener('submit', (evt) => {
-      evt.preventDefault;
+      evt.preventDefault();
+      this._disableBtn();
     });
     this._setEventListeners();
+    this._disableBtn();
   }
 }
 
