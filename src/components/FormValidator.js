@@ -1,13 +1,4 @@
-// Валидация форм из задания
-const config = {
-  formSelector: '.popup__container',
-  inputSelector: '.popup__input',
-  submitButtonSelector: '.popup__save-button',
-  popupCloseBtn: '.popup__close-button',
-  inactiveButtonClass: 'popup__save-button_disabled',
-  inputErrorClass: 'popup__error',
-  errorClass: 'popup__input-error'
-}
+import { config } from '../utils/constants.js'
 
 class FormValidator {
   constructor(form, config) {
@@ -64,7 +55,6 @@ class FormValidator {
     this._inputList.forEach((inputElement) => {
       this._hideInputError(inputElement);
     });
-    this._formElement.reset();
   }
   // Установка листнеров на инпуты
   _setEventListeners() {
