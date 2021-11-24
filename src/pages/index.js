@@ -20,12 +20,12 @@ import { profileSelector,
   cardsList,
   formValidators,
   initialCards,
-  config
+  configValidator
 } from '../utils/constants.js'
 
 // Функция конструирования одной карточки, возвращает элемент
 const createCard = (cardData) => {
-  const newCard = new Card ({ 
+  const newCard = new Card({ 
     data: cardData,
    handleCardClick: () => {
     popupWithImage.open(cardData)
@@ -90,4 +90,4 @@ const enableValidate = (config) => {
   });
 };
 
-enableValidate(config);
+enableValidate(configValidator);
