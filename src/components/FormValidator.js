@@ -1,31 +1,32 @@
-import { config } from '../utils/constants.js'
-
-class FormValidator {
+export class FormValidator {
   constructor(form, config) {
     this._formElement = form;
-    this._inputList = Array.from(form.querySelectorAll(config.inputSelector));
-    this._buttonElement = this._formElement.querySelector(config.submitButtonSelector);
+    this._config = config;
+    this._inputList = Array.from(form.querySelectorAll(this._config.inputSelector));
+    this._buttonElement = this._formElement.querySelector(this._config.submitButtonSelector);
+    this._inputErrorClass = this._config.inputErrorClass
+    this._inactiveButtonClass = this._config.inactiveButtonClass
   }
   // Прячет ошибку валидации
   _hideInputError(inputElement) {
     const inputError = this._formElement.querySelector(`.popup__input-error_${inputElement.id}`);
-    inputElement.classList.remove(config.inputErrorClass);
+    inputElement.classList.remove(this._inputErrorClass);
     inputError.textContent = '';
   }
   // Показывает ошибку валидации
   _showInputError(inputElement, errorElement) {
     const inputError = this._formElement.querySelector(`.popup__input-error_${inputElement.id}`);
-    inputElement.classList.add(config.inputErrorClass);
+    inputElement.classList.add(this._inputErrorClass);
     inputError.textContent = errorElement;
   }
   // Функция, делающая кнопку неактивной после создания карточки
   _disableBtn() {
-    this._buttonElement.classList.add(config.inactiveButtonClass);
+    this._buttonElement.classList.add(this._inactiveButtonClass);
     this._buttonElement.disabled = true;
   }
   // Функция, делающая кнопку активной
   _enableBtn() {
-    this._buttonElement.classList.remove(config.inactiveButtonClass);
+    this._buttonElement.classList.remove(this._inactiveButtonClass);
     this._buttonElement.disabled = false;
   }
   // Возвращает, есть ли в форме невалидные поля
@@ -75,5 +76,3 @@ class FormValidator {
     this._disableBtn();
   }
 }
-
-export { config, FormValidator }

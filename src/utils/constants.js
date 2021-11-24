@@ -48,7 +48,7 @@ export const initialCards = [
 ];
 
 // Валидация форм из задания
-export const config = {
+export const configValidator = {
   formSelector: '.popup__container',
   inputSelector: '.popup__input',
   submitButtonSelector: '.popup__save-button',

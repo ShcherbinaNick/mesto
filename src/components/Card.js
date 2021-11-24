@@ -38,7 +38,7 @@ class Card {
   // Установка слушателей в одном приватном методе
   _setEventListeners() {
     // Лайк
-    this._card.querySelector('.card__like-button').addEventListener('click', () => {
+    this._likeBtn.addEventListener('click', () => {
       this._like();
     });
     // Удаление
@@ -46,7 +46,7 @@ class Card {
       this._deleteCard();
     });
     // Открытие картинки
-    this._card.querySelector('.card__image').addEventListener('click', () => {
+    this._cardImage.addEventListener('click', () => {
       this._handleCardClick();
     });
   }
