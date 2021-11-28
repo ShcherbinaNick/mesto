@@ -6,6 +6,8 @@ import { Section } from '../components/Section.js'
 import { PopupWithImage } from '../components/PopupWithImage.js';
 import { PopupWithForm } from '../components/PopupWithForm.js';
 import { UserInfo } from '../components/UserInfo.js';
+import { PopupWithConfirmation} from "../components/PopupWithConfirmation.js"
+import { Api } from '../components/Api.js';
 
 import { profileSelector,
   cardEditSelector,
@@ -19,47 +21,136 @@ import { profileSelector,
   jobInput,
   cardsList,
   formValidators,
-  initialCards,
-  configValidator
+  configValidator,
+  avatarPopupSelector,
+  avatarImageSelector,
+  avatarEditBtn,
+  popupWithConfirmationSelector
 } from '../utils/constants.js'
+
+const api = new Api({
+  baseUrl: 'https://nomoreparties.co/v1/cohort-30',
+  headers: {
+    authorization: '47f8c499-4c8d-4d07-9fbb-42aad97eb271',
+    'Content-Type': 'application/json'
+  }
+});
+
+let userId = null;
+
+Promise.all([ api.getInitialCards(), api.getUserInfo() ])
+  .then(([dataCards, dataUser]) => {
+    userId = dataUser._id;
+    newUser.setUserInfo(dataUser);
+    newUser.setUserAvatar(dataUser)
+    cardSection.renderItems(dataCards);
+  })
+
+const confirmationPopup = new PopupWithConfirmation(popupWithConfirmationSelector)
 
 // Функция конструирования одной карточки, возвращает элемент
 const createCard = (cardData) => {
-  const newCard = new Card({ 
-    data: cardData,
-   handleCardClick: () => {
-    popupWithImage.open(cardData)
-   } 
-  }, cardsTemplate)
-  return newCard.generateCard()
-}
+  const newCard = new Card({
+    data: {...cardData, currentUserId: userId},
+     handleCardClick: () => {
+      popupWithImage.open(cardData)
+     },
+     setLikeCallback: (cardId) => {
+      api.setCardLike(cardId)
+        .then((dataCard) => {
+          newCard.like(dataCard)
+        })
+        .catch(err => console.log(err))
+     },
+     removeLikeCallback: (cardId) => {
+      api.removeCardLike(cardId)
+        .then(dataCard => newCard.like(dataCard))
+        .catch(err => console.log(err))
+     },
+     cardDeleteCallback: (cardId) => {
+      confirmationPopup.open()
+      formValidators.card_delete.enableBtn()
+      confirmationPopup.submitAction(() => {
+        api.removeCard(cardId)
+          .then((res) => {
+            confirmationPopup.close()
+            newCard.deleteCard()
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      })
+     }
+    }, cardsTemplate)
+    return newCard.generateCard()
+  }
 
 // Создание экземпляра Section
 const cardSection = new Section({
-  items: initialCards,
   renderer: data => {
     cardSection.addItem(createCard(data));
   }
 }, cardsList)
-cardSection.renderItems();
 
 // Создать экземпляры для popupWithImage и popupWithForm
-const newUser = new UserInfo(profileNameSelector, profileInfoSelector)
+const newUser = new UserInfo(profileNameSelector, profileInfoSelector, avatarImageSelector)
 
 const profilePopupWithForm = new PopupWithForm(
   profileSelector, (inputValues) => {
-    newUser.setUserInfo(inputValues)
-    profilePopupWithForm.close();
+    profilePopupWithForm.toggleLoading(true)
+    api.setUserInfo(inputValues)
+      .then(res => {
+      newUser.setUserInfo(res);
+      profilePopupWithForm.close();
+      })
+      .catch(err => {
+        console.log(err)
+      })
+      .finally(() => {
+        profilePopupWithForm.toggleLoading(false)
+      })
   }
 )
 
+// Экземпляр попапа для редактирования картинки аватарки
+const avatarPopupWithForm = new PopupWithForm(
+    avatarPopupSelector , ({"profile-edit-avatar": link}) => {
+      avatarPopupWithForm.toggleLoading(true)
+      api.setAvatar(link)
+        .then((res) => {
+          newUser.setUserAvatar(res)
+          avatarPopupWithForm.close()
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+        .finally(()=>{
+          avatarPopupWithForm.toggleLoading(false)
+        })
+})
+
+avatarEditBtn.addEventListener("click", () => {
+  avatarPopupWithForm.open()
+})
+
 // Новый экземпляр попапа с формой для попапа добавления карточек
 const cardPopupWithForm = new PopupWithForm(
-    cardEditSelector, (inputValues) => {
-      const newCardData = {}
-      newCardData.name = inputValues["card-input-name"]
-      newCardData.link = inputValues["card-input-link"]
-      cardSection.addItem(createCard(newCardData))
+  cardEditSelector, (inputValues) => {
+    const newCardData = {}
+    newCardData.name = inputValues["card-input-name"]
+    newCardData.link = inputValues["card-input-link"]
+    profilePopupWithForm.toggleLoading(true)
+    api.postCard(newCardData)
+      .then((res) => {
+        cardSection.addItem(createCard(res))
+        cardPopupWithForm.close()
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+      .finally(() => {
+        profilePopupWithForm.toggleLoading(false)
+      })
       cardPopupWithForm.close()
     }
 )

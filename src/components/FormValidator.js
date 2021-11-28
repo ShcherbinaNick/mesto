@@ -25,7 +25,7 @@ export class FormValidator {
     this._buttonElement.disabled = true;
   }
   // Функция, делающая кнопку активной
-  _enableBtn() {
+  enableBtn() {
     this._buttonElement.classList.remove(this._inactiveButtonClass);
     this._buttonElement.disabled = false;
   }
@@ -40,7 +40,7 @@ export class FormValidator {
     if (this._hasInvalidInput()) {
       this._disableBtn();
     } else {
-      this._enableBtn();
+      this.enableBtn();
     }
   }
   // Проверка на валидность
