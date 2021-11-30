@@ -18,5 +18,8 @@ export class PopupWithConfirmation extends Popup {
     super.setEventListeners()
     this._form.addEventListener('submit', this._formSubmitBind)
   }
-
+  close() {
+    super.close()
+    this._form.removeEventListener('submit', this._formSubmitBind)
+  }
 }
