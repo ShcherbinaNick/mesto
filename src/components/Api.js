@@ -1,23 +1,22 @@
-function onResponse(res) {
-  return res.ok ? res.json() : Promise.reject(`Ошибка: ${res}`);
-}
-
 export class Api{
   constructor({baseUrl, headers}) {
     this._url = baseUrl;
     this._headers = headers;
   }
+  _onResponse(res) {
+    return res.ok ? res.json() : Promise.reject(`Ошибка: ${res}`);
+  }  
   getInitialCards() {
     return fetch(`${this._url}/cards`, {
       headers: this._headers,
     })
-    .then(onResponse)
+    .then(this._onResponse)
   }
   getUserInfo() {
     return fetch(`${this._url}/users/me`, {
       headers: this._headers,
     })
-    .then(onResponse)
+    .then(this._onResponse)
   }
   setUserInfo(userData) {
     return fetch(`${this._url}/users/me`, {
@@ -28,7 +27,7 @@ export class Api{
         about: userData["profile-input-description"]
       })
     })
-    .then(onResponse)
+    .then(this._onResponse)
   }
   setAvatar(link) {
     return fetch(`${this._url}/users/me/avatar`, {
@@ -38,21 +37,21 @@ export class Api{
         avatar: link
         })
     })
-    .then(onResponse)
+    .then(this._onResponse)
   }
   setCardLike(cardId) {
     return fetch(`${this._url}/cards/likes/${cardId}`, {
       method: "PUT",
       headers: this._headers,
     })
-    .then(onResponse)
+    .then(this._onResponse)
   }
   removeCardLike(cardId) {
     return fetch(`${this._url}/cards/likes/${cardId}`, {
       method: "DELETE",
       headers: this._headers,
     })
-    .then(onResponse)
+    .then(this._onResponse)
   }
   postCard(newCard) {
     return fetch(`${this._url}/cards`, {
@@ -63,13 +62,13 @@ export class Api{
         link: newCard.link
         })
     })
-    .then(onResponse)
+    .then(this._onResponse)
   }
   removeCard(cardId) {
     return fetch(`${this._url}/cards/${cardId}`, {
       method: "DELETE",
       headers: this._headers,
     })
-    .then(onResponse)
+    .then(this._onResponse)
   }
 }

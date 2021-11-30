@@ -45,6 +45,9 @@ Promise.all([ api.getInitialCards(), api.getUserInfo() ])
     newUser.setUserAvatar(dataUser)
     cardSection.renderItems(dataCards);
   })
+  .catch((err) => {
+    console.log(err)
+  })
 
 const confirmationPopup = new PopupWithConfirmation(popupWithConfirmationSelector)
 
@@ -101,7 +104,7 @@ const profilePopupWithForm = new PopupWithForm(
     api.setUserInfo(inputValues)
       .then(res => {
       newUser.setUserInfo(res);
-      profilePopupWithForm.close();
+        profilePopupWithForm.close()
       })
       .catch(err => {
         console.log(err)
@@ -130,6 +133,7 @@ const avatarPopupWithForm = new PopupWithForm(
 })
 
 avatarEditBtn.addEventListener("click", () => {
+  formValidators[ 'card_avatar_edit' ].resetValidation();
   avatarPopupWithForm.open()
 })
 
@@ -139,7 +143,7 @@ const cardPopupWithForm = new PopupWithForm(
     const newCardData = {}
     newCardData.name = inputValues["card-input-name"]
     newCardData.link = inputValues["card-input-link"]
-    profilePopupWithForm.toggleLoading(true)
+    cardPopupWithForm.toggleLoading(true)
     api.postCard(newCardData)
       .then((res) => {
         cardSection.addItem(createCard(res))
@@ -149,9 +153,8 @@ const cardPopupWithForm = new PopupWithForm(
         console.log(err)
       })
       .finally(() => {
-        profilePopupWithForm.toggleLoading(false)
+        cardPopupWithForm.toggleLoading(false)
       })
-      cardPopupWithForm.close()
     }
 )
 

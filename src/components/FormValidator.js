@@ -53,6 +53,7 @@ export class FormValidator {
   }
   // Очистка ошибок
   resetValidation() {
+    this._disableBtn();
     this._inputList.forEach((inputElement) => {
       this._hideInputError(inputElement);
     });
@@ -70,7 +71,6 @@ export class FormValidator {
   enableValidate() {
     this._formElement.addEventListener('submit', (evt) => {
       evt.preventDefault();
-      this._disableBtn();
     });
     this._setEventListeners();
     this._disableBtn();
